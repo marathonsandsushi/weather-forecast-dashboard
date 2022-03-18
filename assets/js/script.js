@@ -30,6 +30,9 @@ function initPage() {
 
 function createWeatherReport(city) {
     
+
+    console.log("KOOOOOOOOOKO" + city);
+
     const latLonURL =
       "http://api.openweathermap.org/geo/1.0/direct?q=" + city + apiKey;
     $.ajax({
@@ -37,13 +40,13 @@ function createWeatherReport(city) {
       method: "GET",
     }).then(function (response) {
       
-        getUVIndex(response[0].lat, response[0].lon);
+        getUVIndex(response[0].lat, response[0].lon, city);
 
     });
 }
 
 
-function getUVIndex (lat, lon) {
+function getUVIndex (lat, lon, city) {
     
     const UVIurl =
     "http://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + apiKey;
@@ -76,19 +79,25 @@ function getUVIndex (lat, lon) {
   function makeList() {
 
     const cityElID = city.replace(' ', "-");
+
+    if($(`#${cityElID}`).length ) return;
+ 
+
     let listItem = $("<button>").addClass("list-group-item").attr("id", cityElID).text(city);
 
     $(".list").append(listItem);
 
     $(`#${cityElID}`).click(function () {
       const id = $(this).attr('id');
-      cityRevist (id);
+      let myCity = id.replace('-', ' ');
+      cityRevist(myCity);
     });
     
   }
 
-  function cityRevist (id) {
-    console.log(`cityRevist  - ${id}`);
+  function cityRevist (city) {
+    console.log(`cityRevist  - ${city}`);
+    createWeatherReport(city);
   }
 
   function getCurrentConditions(response, currentUvi) {
