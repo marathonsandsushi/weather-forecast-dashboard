@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Weather Dashboard</title>
+</head>
+<body>
+
+  <!-- start of header  -->
+  <div class="bg-dark pt-2 pb-2" id="header"> 
+    <div class="container">
+        <h1 class="text-center text-white">Weather Dashboard</h1>
+    </div>
+</div>
+<!-- end of header -->
+
+<!-- start container -->
+<div class="container-fluid"> 
+
+    <!-- start row -->
+    <div class="row"> 
+
+        <!-- start column -->
+        <div class="col-lg-3 bg-light pt-3 pb-3"> 
+
+            <h5>Search for a city:</h5>
+
+            <!-- start input group -->
+            <div class="input-group mb-3"> 
+                <input id="searchTerm" type="text" class="form-control" placeholder="Enter a city" class="input-group-append">
+                <button id="searchBtn" class="btn btn-primary searchTerm" type="button" id="button-addon2">Search  <i class="far fa-search"></i></button>
+            </div>
+            <!-- end input group -->   
+
+            <!-- start card -->
+            <div class="card"> 
+                <ul class="list-group list-group-flush list">
+                </ul>
+            </div> 
+            <!-- end card -->
+        </div> 
+        <!-- end column -->
+
+        <!-- start current weather column -->
+        <div class="col-lg-9"> 
+            <div id="currentCity" class="mt-4">
+           
+            </div>
+        </div> 
+        <!-- end current weather column -->
+    </div> 
+    <!-- end row -->
+
+    <!-- start forecast container -->
+    <div class="mt-4 col-md-12"> 
+
+        <h5 id="forecastH5" class="mt-3 hide">5-Day Forecast:</h5>
+
+        <!-- start row -->
+        <div id="forecast" class="row"> 
+
+
+        </div> 
+        <!-- end row -->
+    </div> 
+    <!-- end forecast container -->
+</div> 
+<!-- end container -->
+
+    <script src="https://kit.fontawesome.com/ca89a4b9f5.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
+
+<!-- Madison Kendall Weather-Dashboard code -->
