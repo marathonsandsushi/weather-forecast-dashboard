@@ -1,8 +1,5 @@
 function initPage() {
-  // let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
 
-  // var userFormEl = document.getElementById("input-group");
-  // let citySearchHistory = JSON.parse(localStorage.getItem(city)) || [];
 
   // store the value of the input
   let city = $("#searchTerm").val();
@@ -75,11 +72,23 @@ function getUVIndex (lat, lon) {
   });
 }
 
-  // search history function
+  // add city to search history
   function makeList() {
-    let listItem = $("<li>").addClass("list-group-item").text(city);
+
+    const cityElID = city.replace(' ', "-");
+    let listItem = $("<button>").addClass("list-group-item").attr("id", cityElID).text(city);
+
     $(".list").append(listItem);
-    // localStorage.setItem(response, JSON.stringify(listItem));
+
+    $(`#${cityElID}`).click(function () {
+      const id = $(this).attr('id');
+      cityRevist (id);
+    });
+    
+  }
+
+  function cityRevist (id) {
+    console.log(`cityRevist  - ${id}`);
   }
 
   function getCurrentConditions(response, currentUvi) {
@@ -120,8 +129,6 @@ function getUVIndex (lat, lon) {
     $("#currentCity").append(card);
   }
   
-
-
   function getCurrentForecast() {
     $.ajax({
       url:
@@ -177,23 +184,5 @@ function getUVIndex (lat, lon) {
       }
     });
   }
-  // function to save to localStorage
-  // let searchHistory = {
-  //   cityTerm: city,
-  // };
-  // citySearchHistory.push(searchHistory);
-  // localStorage.setItem("city", JSON.stringify(citySearchHistory));
-
-  // $(".searchTerm").on("click", function () {
-  //   localStorage.getItem($(this).text());
-
-  //   // Set the city variable equal to the city information from the clicked button and trim any extra spaces
-  //   var city = $(this).text().trim();
-
-  //   //Run the getCityWeather(city) function
-  //   getCityWeather(city);
-  // });
 }
 initPage();
-
-// userFormEl.addEventListener("submit", formSubmitHandler);
