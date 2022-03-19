@@ -55,6 +55,7 @@ function getUVIndex (lat, lon, city) {
     method: "GET",
   }).then(function (response) {
 
+
     let myUvi = response.current.uvi;
 
     // full url to call api
@@ -107,6 +108,8 @@ function getUVIndex (lat, lon, city) {
 
     $("#currentCity").empty();
 
+    console.log(currentUvi);
+
     // get and set the current weather content
     const card = $("<div>").addClass("card");
     const cardBody = $("<div>").addClass("card-body");
@@ -126,6 +129,18 @@ function getUVIndex (lat, lon, city) {
     const todayUvi = $("<p>")
       .addClass("card-text current-uvi")
       .text("UV Index: " + currentUvi);
+        // coloring for uvIndex 
+        if(currentUvi > 7 && currentUvi < 11) {
+          todayUvi.addClass("bg-danger card-text current-uvi");
+        } else if (currentUvi > 2 && currentUvi < 7) {
+          todayUvi.addClass("bg-warning card-text current-uvi");
+        } else if (currentUvi > 0 && currentUvi < 2) {
+            todayUvi.addClass("bg-success card-text current-uvi");
+        } else { 
+          alert("Error");
+        }
+
+
     const image = $("<img>").attr(
       "src",
       "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png"
