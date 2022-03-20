@@ -1,6 +1,4 @@
 function initPage() {
-
-
   // store the value of the input
   let city = $("#searchTerm").val();
   // store api key
@@ -24,13 +22,10 @@ function initPage() {
     $("#searchTerm").val("");
 
     createWeatherReport(city);
-
   });
 
 
-function createWeatherReport(city) {
-    
-
+  function createWeatherReport(city) {
     console.log("KOOOOOOOOOKO" + city);
 
     const latLonURL =
@@ -39,65 +34,60 @@ function createWeatherReport(city) {
       url: latLonURL,
       method: "GET",
     }).then(function (response) {
-      
-        getUVIndex(response[0].lat, response[0].lon, city);
-
+      getUVIndex(response[0].lat, response[0].lon, city);
     });
-}
+  }
 
-
-function getUVIndex (lat, lon, city) {
-    
-    const UVIurl = "https://api.openweathermap.org/data/2.5/uvi/forecast?lat="+ lat + "&lon=" + lon + apiKey;
-  $.ajax({
-    url: UVIurl,
-    method: "GET",
-  }).then(function (response) {
-
-    
-    let myUvi = response[0].value;
-    console.log("My response  = " + response);
-
-
-    // full url to call api
-    const queryUrl =
-      "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
+  function getUVIndex(lat, lon, city) {
+    const UVIurl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + apiKey;
 
     $.ajax({
+      url: UVIurl,
+      method: "GET",
+    }).then(function (response) {
+
+      const myUvi = response.current.uvi;
+
+      console.log("My response  = " + response);
+
+      // full url to call api
+      const queryUrl =
+        "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
+
+      $.ajax({
         url: queryUrl,
         method: "GET",
-    }).then(function (response) {
+      }).then(function (response) {
         let tempF = (response.main.temp - 273.15) * 1.8 + 32;
 
         getCurrentConditions(response, myUvi);
         getCurrentForecast(response);
         makeList();
+      });
     });
-
-  });
-}
+  }
 
   // add city to search history
   function makeList() {
+    const cityElID = city.replace(" ", "-");
 
-    const cityElID = city.replace(' ', "-");
+    if ($(`#${cityElID}`).length) return;
 
-    if($(`#${cityElID}`).length ) return;
- 
-
-    let listItem = $("<button>").addClass("list-group-item").attr("id", cityElID).text(city);
+    let listItem = $("<button>")
+      .addClass("list-group-item")
+      .attr("id", cityElID)
+      .text(city);
 
     $(".list").append(listItem);
 
     $(`#${cityElID}`).click(function () {
-      const id = $(this).attr('id');
-      let myCity = id.replace('-', ' ');
+      const id = $(this).attr("id");
+      let myCity = id.replace("-", " ");
       cityRevist(myCity);
     });
-    
   }
 
-  function cityRevist (city) {
+  function cityRevist(city) {
     console.log(`cityRevist  - ${city}`);
     createWeatherReport(city);
   }
@@ -131,23 +121,19 @@ function getUVIndex (lat, lon, city) {
       .addClass("card-text current-uvi")
       .text("UV Index: ");
 
+    const uviValue = $("<span>").text(currentUvi);
+    // coloring for uvIndex
+    if (currentUvi > 7 && currentUvi < 11) {
+      uviValue.addClass("bg-danger card-text current-uvi");
+    } else if (currentUvi > 2 && currentUvi < 7) {
+      uviValue.addClass("bg-warning card-text current-uvi");
+    } else if (currentUvi >= 0 && currentUvi < 2) {
+      uviValue.addClass("bg-success card-text current-uvi");
+    } else {
+      alert("Error");
+    }
 
-      const uviValue = $("<span>")
-   .text(currentUvi);
-       // coloring for uvIndex
-       if(currentUvi > 7 && currentUvi < 11) {
-         uviValue.addClass("bg-danger card-text current-uvi");
-       } else if (currentUvi > 2 && currentUvi < 7) {
-         uviValue.addClass("bg-warning card-text current-uvi");
-       } else if (currentUvi >=0 && currentUvi < 2) {
-         uviValue.addClass("bg-success card-text current-uvi");
-       } else {
-         alert("Error");
-       }
- 
-       todayUvi.append(uviValue);
-
-
+    todayUvi.append(uviValue);
 
     const image = $("<img>").attr(
       "src",
@@ -160,7 +146,7 @@ function getUVIndex (lat, lon, city) {
     card.append(cardBody);
     $("#currentCity").append(card);
   }
-  
+
   function getCurrentForecast() {
     $.ajax({
       url:
