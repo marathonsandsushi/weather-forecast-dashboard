@@ -48,15 +48,16 @@ function createWeatherReport(city) {
 
 function getUVIndex (lat, lon, city) {
     
-    const UVIurl =
-    "http://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + apiKey;
+    const UVIurl = "https://api.openweathermap.org/data/2.5/uvi/forecast?lat="+ lat + "&lon=" + lon + apiKey;
   $.ajax({
     url: UVIurl,
     method: "GET",
   }).then(function (response) {
 
+    
+    let myUvi = response[0].value;
+    console.log("My response  = " + response);
 
-    let myUvi = response.current.uvi;
 
     // full url to call api
     const queryUrl =
@@ -128,17 +129,24 @@ function getUVIndex (lat, lon, city) {
       .text("Wind Speed: " + response.wind.speed + " MPH");
     const todayUvi = $("<p>")
       .addClass("card-text current-uvi")
-      .text("UV Index: " + currentUvi);
-        // coloring for uvIndex 
-        if(currentUvi > 7 && currentUvi < 11) {
-          todayUvi.addClass("bg-danger card-text current-uvi");
-        } else if (currentUvi > 2 && currentUvi < 7) {
-          todayUvi.addClass("bg-warning card-text current-uvi");
-        } else if (currentUvi > 0 && currentUvi < 2) {
-            todayUvi.addClass("bg-success card-text current-uvi");
-        } else { 
-          alert("Error");
-        }
+      .text("UV Index: ");
+
+
+      const uviValue = $("<span>")
+   .text(currentUvi);
+       // coloring for uvIndex
+       if(currentUvi > 7 && currentUvi < 11) {
+         uviValue.addClass("bg-danger card-text current-uvi");
+       } else if (currentUvi > 2 && currentUvi < 7) {
+         uviValue.addClass("bg-warning card-text current-uvi");
+       } else if (currentUvi >=0 && currentUvi < 2) {
+         uviValue.addClass("bg-success card-text current-uvi");
+       } else {
+         alert("Error");
+       }
+ 
+       todayUvi.append(uviValue);
+
 
 
     const image = $("<img>").attr(
