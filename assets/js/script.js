@@ -5,6 +5,10 @@ function initPage() {
   const apiKey = "&appid=afaa8eea1769b4359fd8e07b2efcefbd";
   let date = new Date();
 
+  // initialize search history data structure
+  let searchHistory = [];
+  loadSavedCities();
+
   $("#searchTerm").keypress(function (event) {
     if (event.keyCode === 13) {
       event.preventDefault();
@@ -24,7 +28,6 @@ function initPage() {
     createWeatherReport(city);
   });
 
-
   function createWeatherReport(city) {
     console.log("KOOOOOOOOOKO" + city);
 
@@ -39,13 +42,17 @@ function initPage() {
   }
 
   function getUVIndex(lat, lon, city) {
-    const UVIurl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + apiKey;
+    const UVIurl =
+      "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+      lat +
+      "&lon=" +
+      lon +
+      apiKey;
 
     $.ajax({
       url: UVIurl,
       method: "GET",
     }).then(function (response) {
-
       const myUvi = response.current.uvi;
 
       console.log("My response  = " + response);
@@ -80,11 +87,25 @@ function initPage() {
 
     $(".list").append(listItem);
 
+    searchHistory.push(city);
+    const jsonObj = JSON.stringify(searchHistory);
+    localStorage.setItem("searchHistory", jsonObj);
+
     $(`#${cityElID}`).click(function () {
       const id = $(this).attr("id");
       let myCity = id.replace("-", " ");
       cityRevist(myCity);
     });
+  }
+
+  function loadSavedCities() {
+    let data = JSON.parse(localStorage.getItem("searchHistory"));
+    if (data) {
+      searchHistory = data;
+    }
+    for (city in searchHistory) {
+      console.log(`city: ${city}`);
+    }
   }
 
   function cityRevist(city) {
@@ -204,3 +225,5 @@ function initPage() {
   }
 }
 initPage();
+
+// Madison Kendall Weather-Dashboard code
