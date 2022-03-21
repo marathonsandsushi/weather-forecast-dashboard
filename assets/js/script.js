@@ -1,3 +1,9 @@
+$(document).ready(function(){
+  
+  initPage();
+  
+});
+
 function initPage() {
   // store the value of the input
   let city = $("#searchTerm").val();
@@ -7,7 +13,9 @@ function initPage() {
 
   // initialize search history data structure
   let searchHistory = [];
+
   loadSavedCities();
+
 
   $("#searchTerm").keypress(function (event) {
     if (event.keyCode === 13) {
@@ -29,7 +37,6 @@ function initPage() {
   });
 
   function createWeatherReport(city) {
-    console.log("KOOOOOOOOOKO" + city);
 
     const latLonURL =
       "http://api.openweathermap.org/geo/1.0/direct?q=" + city + apiKey;
@@ -55,8 +62,6 @@ function initPage() {
     }).then(function (response) {
       const myUvi = response.current.uvi;
 
-      console.log("My response  = " + response);
-
       // full url to call api
       const queryUrl =
         "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
@@ -68,7 +73,7 @@ function initPage() {
         let tempF = (response.main.temp - 273.15) * 1.8 + 32;
 
         getCurrentConditions(response, myUvi);
-        getCurrentForecast(response);
+        getCurrentForecast(city);
         makeList();
       });
     });
@@ -99,28 +104,60 @@ function initPage() {
   }
 
   function loadSavedCities() {
+
     let data = JSON.parse(localStorage.getItem("searchHistory"));
+
     if (data) {
       searchHistory = data;
     }
-    for (city in searchHistory) {
-      console.log(`city: ${city}`);
+    var res = [];
+              
+    for(var i in searchHistory) res.push(searchHistory[i]);
+
+    for (var i = 0; i < res.length ; i++) {
+
+      addCityFromHistoryToList(res[i]);
     }
   }
 
+  // add city to search history
+  function addCityFromHistoryToList(city) {
+    
+    const cityElID = city.replace(" ", "-");
+
+    let listItem = $("<button>")
+      .addClass("list-group-item")
+      .attr("id", cityElID)
+      .text(city);
+
+    $("#city-history").append(listItem);
+
+    document.getElementById(cityElID).onclick = function () {
+      const id = $(this).attr("id");
+      let myCity = id.replace("-", " ");
+      cityRevist(myCity);
+    }
+
+    // $(`#${cityElID}`).click(function () {
+    //   const id = $(this).attr("id");
+    //   let myCity = id.replace("-", " ");
+    //   cityRevist(myCity);
+    // });
+  }
+
   function cityRevist(city) {
-    console.log(`cityRevist  - ${city}`);
+   
     createWeatherReport(city);
   }
 
   function getCurrentConditions(response, currentUvi) {
+
+
     // get the temperature and convert to fahrenheit
     let tempF = (response.main.temp - 273.15) * 1.8 + 32;
     tempF = Math.floor(tempF);
 
     $("#currentCity").empty();
-
-    console.log(currentUvi);
 
     // get and set the current weather content
     const card = $("<div>").addClass("card");
@@ -168,7 +205,8 @@ function initPage() {
     $("#currentCity").append(card);
   }
 
-  function getCurrentForecast() {
+  function getCurrentForecast(city) {
+
     $.ajax({
       url:
         "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey,
@@ -224,6 +262,5 @@ function initPage() {
     });
   }
 }
-initPage();
 
 // Madison Kendall Weather-Dashboard code
