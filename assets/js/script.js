@@ -39,7 +39,7 @@ function initPage() {
   function createWeatherReport(city) {
 
     const latLonURL =
-      "http://api.openweathermap.org/geo/1.0/direct?q=" + city + apiKey;
+      "https://api.openweathermap.org/geo/1.0/direct?q=" + city + apiKey;
     $.ajax({
       url: latLonURL,
       method: "GET",
